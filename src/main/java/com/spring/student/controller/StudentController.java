@@ -1,5 +1,6 @@
 package com.spring.student.controller;
 
+import com.spring.student.exceptionHanling.RestResponse;
 import com.spring.student.model.Student;
 import com.spring.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,12 @@ public class StudentController {
 
 
     @GetMapping("/student")
-    public ResponseEntity getStudents(@RequestParam(name = "studentId", required = false) String studentId) {
+    public ResponseEntity<RestResponse<List<Student>>> getStudents(@RequestParam(name = "studentId", required = false) String studentId) {
+        RestResponse<List<Student>> restResponse = new RestResponse<>();
+        restResponse.setData(studentId != null ?
+                Collections.singletonList(studentService.getById(studentId)) : studentService.getAllStudent());
 
-        List<Student> studentList = studentId != null ?
-                Collections.singletonList(studentService.getById(studentId)) : studentService.getAllStudent();
-        return new ResponseEntity(studentList.isEmpty() ? "No student found" : studentList, HttpStatus.OK);
+        return new ResponseEntity(restResponse, HttpStatus.OK);
     }
 
 

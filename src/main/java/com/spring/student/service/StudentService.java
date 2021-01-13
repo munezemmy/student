@@ -1,8 +1,10 @@
 package com.spring.student.service;
 
+import com.spring.student.exceptionHanling.StudentException;
 import com.spring.student.model.Student;
 import com.spring.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class StudentService {
 
     public Student getById(String studentId) {
         Optional<Student> student = studentRepository.findById(studentId);
-        return student.orElseThrow(() -> new RuntimeException(String.format("Student with id : %s  not found", studentId)));
+        return student.orElseThrow(() -> new StudentException(String.format("Student with id : %s  not found", studentId), "ST122", HttpStatus.NOT_FOUND));
     }
 
 }
